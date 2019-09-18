@@ -1,0 +1,170 @@
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container bootstrap snippet">
+	<div class="row" *ngIf="authUser != false && approvedUser == 'approved'; else other_content">
+		<div class="col-md-12 my-5">
+			<div *ngFor="let list of userListLoop">
+				<div *ngIf="list.status == 'pending'">
+					<div class="col-sm-6">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title">New Request</h5>
+								<p class="card-text">
+									{{ list.username }} want's to join the group
+								</p>
+								<button (click)="approveStatus(list.username, 'approve')" class="btn btn-success btn-sm mr-4">Approve</button>
+								<button (click)="approveStatus(list.username, 'reject')" class="btn btn-danger btn-sm">Reject</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 bg-white ">
+			<div class=" row border-bottom padding-sm" style="height: 40px;">
+				Member
+			</div>
+			<!-- member list -->
+			<ul class="friend-list">
+				<li class="active bounceInDown mb-1" *ngFor="let list of userListLoop">
+					<div class="simm" *ngIf="list.status == 'approved'">
+						<a href="#" class="clearfix">
+							<img src="{{ list.image }}" alt="" class="img-circle">
+							<div class="friend-name">
+								<strong>{{ list.username }}</strong>
+							</div>
+						</a>
+
+						<div class="last-message text-muted" *ngIf="list.user_level == 'user'">
+							<button class="btn btn-danger btn-sm no-rounded" type="button"
+								(click)="removeUser(list.username)">Delete</button>
+						</div>
+					</div>
+				</li>
+				<!-- <li>
+                	<a href="#" class="clearfix">
+                		<img src="https://bootdey.com/img/Content/user_1.jpg" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong>Kate</strong>
+                		</div>
+                		<div class="last-message text-muted">Lorem ipsum dolor sit amet.</div>
+                		<small class="time text-muted">Yesterday</small>
+                		<small class="chat-alert text-muted"><i class="fa fa-reply"></i></small>
+                	</a>
+                </li>     
+                <li>
+                	<a href="#" class="clearfix">
+                		<img src="https://bootdey.com/img/Content/user_2.jpg" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong>Kate</strong>
+                		</div>
+                		<div class="last-message text-muted">Lorem ipsum dolor sit amet.</div>
+                		<small class="time text-muted">Yesterday</small>
+                		<small class="chat-alert text-muted"><i class="fa fa-reply"></i></small>
+                	</a>
+                </li>        
+                <li>
+                	<a href="#" class="clearfix">
+                		<img src="https://bootdey.com/img/Content/user_6.jpg" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong>Kate</strong>
+                		</div>
+                		<div class="last-message text-muted">Lorem ipsum dolor sit amet.</div>
+                		<small class="time text-muted">Yesterday</small>
+                		<small class="chat-alert text-muted"><i class="fa fa-reply"></i></small>
+                	</a>
+                </li>          
+                <li>
+                	<a href="#" class="clearfix">
+                		<img src="https://bootdey.com/img/Content/user_5.jpg" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong>Kate</strong>
+                		</div>
+                		<div class="last-message text-muted">Lorem ipsum dolor sit amet.</div>
+                		<small class="time text-muted">Yesterday</small>
+                		<small class="chat-alert text-muted"><i class="fa fa-reply"></i></small>
+                	</a>
+                </li>
+                <li>
+                    <a href="#" class="clearfix">
+                		<img src="https://bootdey.com/img/Content/user_2.jpg" alt="" class="img-circle">
+                		<div class="friend-name">	
+                			<strong>Jane Doe</strong>
+                		</div>
+                		<div class="last-message text-muted">Lorem ipsum dolor sit amet.</div>
+                		<small class="time text-muted">5 mins ago</small>
+                	<small class="chat-alert text-muted"><i class="fa fa-check"></i></small>
+                	</a>
+                </li>                  -->
+			</ul>
+		</div>
+
+		<!--=========================================================-->
+		<!-- selected chat -->
+		<div class="col-md-8 bg-white ">
+			<div class="chat-message">
+				<ul class="chat">
+					<div *ngFor="let chatlist of userChat">
+						<li class="left clearfix" *ngIf="chatlist.username != cookieUser">
+							<span class="chat-img pull-left">
+								<img src="https://bootdey.com/img/Content/user_3.jpg" alt="User Avatar">
+							</span>
+							<div class="chat-body clearfix">
+								<div class="header">
+									<strong class="primary-font">{{ chatlist.username }}</strong>
+									<small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 12 mins
+										ago</small>
+								</div>
+								<p>
+									{{ chatlist.message }}
+								</p>
+							</div>
+						</li>
+						<li class="right clearfix" *ngIf="chatlist.username == cookieUser">
+							<span class="chat-img pull-right">
+								<img src="https://bootdey.com/img/Content/user_1.jpg" alt="User Avatar">
+							</span>
+							<div class="chat-body clearfix">
+								<div class="header">
+									<strong class="primary-font">{{ chatlist.username }}</strong>
+									<small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 13 mins
+										ago</small>
+								</div>
+								<p>
+									{{ chatlist.message }}
+								</p>
+							</div>
+						</li>
+					</div>
+				</ul>
+			</div>
+			<form [formGroup]="messageForm" (ngSubmit)="submitMessage()">
+				<div class="input-group">
+					<input class="form-control border no-shadow no-rounded" formControlName="message"
+						placeholder="Type your message here">
+					<span class="input-group-btn">
+						<button class="btn btn-success no-rounded" type="submit">Send</button>
+					</span>
+				</div><!-- /input-group -->
+			</form>
+		</div>
+	</div>
+	<ng-template #other_content>
+		<div class="mt-5">
+			<div class="text-center">
+				<div class="card">
+					<h5 class="card-header">Want To Join This Group</h5>
+					<div class="card-body">
+						<h5 class="card-title">Click the below button to request to join group</h5>
+						<p class="card-text">After approval of the admin you are allowed to access the group</p>
+						<div *ngIf="approvedUser == 'pending'; else different_content">
+							<button (click)="joinGroup('pending')" class="btn btn-secondary">Pending</button>
+						</div>
+						<ng-template #different_content>
+							<button (click)="joinGroup('join')" class="btn btn-primary">Join</button>
+						</ng-template>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+</div>
